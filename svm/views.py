@@ -40,14 +40,14 @@ def result(request):
     subprocess.call("python predictSVC.py 'descriptors.csv' 'Z_score_mean_std__intersect_noflip.csv' 'svc.pkl'", shell=True)
     
     with open('descriptors_PREDICTIONS.csv','r') as fin:
-	line = fin.readline()
-	headers = line.strip().split(',')
-	line = fin.readline()
-	data = line.strip().split(',')
-	seqIndex = data[0]
-	prediction = data[1]
-	distToMargin = data[2]
-	P_neg1 = data[3]
-	P_plus1 = data[4]
+        line = fin.readline()
+        headers = line.strip().split(',')
+        line = fin.readline()
+        data = line.strip().split(',')
+        seqIndex = data[0]
+        prediction = data[1]
+        distToMargin = data[2]
+        P_neg1 = data[3]
+        P_plus1 = data[4]
         
     return render(request, 'svm/result.html', {'seqIndex' : seqIndex, 'prediction' : prediction, 'distToMargin' : distToMargin, 'P_neg1' : P_neg1, 'P_plus1' : P_plus1})

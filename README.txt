@@ -101,13 +101,13 @@ Boot bash console
 > cd propy-1.0
 > rm -r build
 > python setup.py install
+> cd ..
 
 > pip install numpy
 > pip install scipy
-> pip install sklearn
-
-#> pip install django~=1.9.0
-#> pip install -U numpy scipy scikit-learn==0.16.0
+> pip install scikit-learn==0.16.0
+> pip install django~=1.9.0
+> pip install urllib3[secure] pyopenssl ndg-httpsclient pyasn1
 
 
 Testing SVM prediction:
