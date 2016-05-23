@@ -19,8 +19,8 @@ import random, math
 import numpy as np
 import numpy.matlib
 
-import scipy.optimize
-import scipy.stats
+#import scipy.optimize
+#import scipy.stats
 
 import pickle as pkl
 
