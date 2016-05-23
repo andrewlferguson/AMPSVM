@@ -1,0 +1,13 @@
+{% extends 'svm/base.html' %}
+
+{% block content %}
+<div>
+    <h2>Success!</h2>
+</div>
+<br></br>
+<p>prediction   = {{ prediction }}</p>
+<p>distToMargin = {{ distToMargin }}</p>
+<p>P(+1)        = {{ P_plus1 }}</p>
+<p>P(-1)        = {{ P_neg1 }}</p>
+<br></br>
+{% endblock %}

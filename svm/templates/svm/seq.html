@@ -1,0 +1,12 @@
+{% extends 'svm/base.html' %}
+
+{% block content %}
+<div>
+    <h2>Support vector machine (SVM) antimicrobial peptide predictor</h2>
+</div>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

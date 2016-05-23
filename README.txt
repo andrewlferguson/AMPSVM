@@ -76,15 +76,15 @@ db.sqlite3
 
 >> git status
 >> git add --all .
->> git commit -m "My AMP_predictor app, first commit"
+>> git commit -m "My AMPSVM app, first commit"
 
 
 GitHub:
 Login to GitHub.com.
-Create a new repository named "AMP_predictor". 
+Create a new repository named "AMPSVM". 
 Leave the "initialize with a README" tickbox un-checked, leave the .gitignore option blank (we've done that manually) and leave the License as None.
 
->> git remote add origin https://github.com/andrewlferguson/AMP_predictor.git
+>> git remote add origin https://github.com/andrewlferguson/AMPSVM.git
 >> sudo git push --set-upstream origin master
 >> sudo git push
 
@@ -92,12 +92,36 @@ Leave the "initialize with a README" tickbox un-checked, leave the .gitignore op
 Python Anywhere:
 Login to PythonAnywhere.com
 Boot bash console
-> git clone https://github.com/andrewlferguson/AMP_predictor.git
-> tree AMP_predictor
-> cd AMP_predictor
+> git clone https://github.com/andrewlferguson/AMPSVM.git
+> tree AMPSVM
+> cd AMPSVM
 > virtualenv --python=python2.7 AMPSVM
 > source AMPSVM/bin/activate
 > pip install django~=1.9.0
+> pip install -U numpy scipy scikit-learn==0.16.0
+
+> cd propy-1.0
+> rm -r build
+> sudo python setup.py install
+
+
+Testing SVM prediction:
+
+> seqFile='seqs.txt'
+> nSeq=1
+
+> python descripGen_12.py "./aaindex/" $seqFile 1 $nSeq
+
+> descFile='descriptors.csv'
+> ZFile='Z_score_mean_std__intersect_noflip.csv'
+> svcPkl='svc.pkl'
+
+> python predictSVC.py $descFile $ZFile $svcPkl
+
+
+
+
+
 
 > python manage.py migrate
 > python manage.py createsuperuser
@@ -109,7 +133,7 @@ After confirming your domain name, choose manual configuration (NOT the "Django"
 Choose Python 2.7, and click Next to finish the wizard.
 
 In the "Virtualenv" section, click red text "Enter the path to a virtualenv", and enter: 
-/home/andrewlferguson/AMP_predictor/AMPSVM/
+/home/andrewlferguson/AMPSVM/AMPSVM/
 Click the blue box with the check mark to save the path.
 
 Click on the "WSGI configuration file" link (in the "Code" section near the top of the page -- it'll be named something like /var/www/<your-PythonAnywhere-username>_pythonanywhere_com_wsgi.py), and you'll be taken to an editor.
@@ -120,7 +144,7 @@ Delete all the contents and replace them with this:
 import os
 import sys
 
-path = '/home/andrewlferguson/AMP_predictor'  # use your own PythonAnywhere username here
+path = '/home/andrewlferguson/AMPSVM'  # use your own PythonAnywhere username here
 if path not in sys.path:
     sys.path.append(path)
 
