@@ -97,26 +97,23 @@ Boot bash console
 > cd AMPSVM
 > virtualenv --python=python2.7 AMPSVM
 > source AMPSVM/bin/activate
-> pip install django~=1.9.0
-> pip install -U numpy scipy scikit-learn==0.16.0
 
 > cd propy-1.0
 > rm -r build
-> sudo python setup.py install
+> python setup.py install
+
+> pip install numpy
+> pip install scipy
+> pip install sklearn
+
+#> pip install django~=1.9.0
+#> pip install -U numpy scipy scikit-learn==0.16.0
 
 
 Testing SVM prediction:
 
-> seqFile='seqs.txt'
-> nSeq=1
-
-> python descripGen_12.py "./aaindex/" $seqFile 1 $nSeq
-
-> descFile='descriptors.csv'
-> ZFile='Z_score_mean_std__intersect_noflip.csv'
-> svcPkl='svc.pkl'
-
-> python predictSVC.py $descFile $ZFile $svcPkl
+> python descripGen_12.py "./aaindex/" 'seqs.txt' 1 1
+> python predictSVC.py 'descriptors.csv' 'Z_score_mean_std__intersect_noflip.csv' 'svc.pkl'
 
 
 

@@ -24,8 +24,8 @@ import scipy.stats
 
 import pickle as pkl
 
-import matplotlib.pyplot as plt
-from matplotlib.colors import Normalize
+#import matplotlib.pyplot as plt
+#from matplotlib.colors import Normalize
 
 from sklearn import svm
 from sklearn import datasets
