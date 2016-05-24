@@ -3,7 +3,11 @@ from django.http import HttpResponseRedirect
 
 from .forms import SeqForm
 
-import subprocess
+import os, sys
+
+sys.path.append('./code')
+import descripGen_12, predictSVC
+
 
 def seq(request):
     # if this is a POST request we need to process the form data
@@ -15,7 +19,7 @@ def seq(request):
             # process the data in form.cleaned_data as required
             seq = form.cleaned_data['seq']
             if seq is not None:
-                f = open( 'seqs.txt', 'w+')
+                f = open('seqs.txt', 'w+')
                 f.write('     1 ')
                 f.write(seq)
                 f.close()
@@ -29,15 +33,11 @@ def seq(request):
     return render(request, 'svm/seq.html', {'form': form})
 
 def result(request):
-    f = open('seqs.txt', 'r')  
-    for line in f:  
-        line =  line.split()  
-        foo = line[1]
-    f.close()
     
-    subprocess.call("python descripGen_12.py './aaindex/' 'seqs.txt' 1 1", shell=True)
+    os.chdir('./code')
     
-    subprocess.call("python predictSVC.py 'descriptors.csv' 'Z_score_mean_std__intersect_noflip.csv' 'svc.pkl'", shell=True)
+    descripGen_12.main('./aaindex','../seqs.txt',1,1)
+    predictSVC.main('descriptors.csv','Z_score_mean_std__intersect_noflip.csv','svc.pkl')
     
     with open('descriptors_PREDICTIONS.csv','r') as fin:
         line = fin.readline()
@@ -49,5 +49,7 @@ def result(request):
         distToMargin = data[2]
         P_neg1 = data[3]
         P_plus1 = data[4]
+        
+    os.chdir('..')
         
     return render(request, 'svm/result.html', {'seqIndex' : seqIndex, 'prediction' : prediction, 'distToMargin' : distToMargin, 'P_neg1' : P_neg1, 'P_plus1' : P_plus1})

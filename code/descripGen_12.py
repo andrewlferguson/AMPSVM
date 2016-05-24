@@ -49,7 +49,7 @@ def union(a, b):
     ''' return the union of two lists '''
     return list(set(a) | set(b))
 
-def descripGen_bespoke(proseq):
+def descripGen_bespoke(proseq, aaindex_path):
 	
 	v_lambda = 7		# no. of tiers in computation of PseAAC; must be shorter than minimum peptide length
 	v_nlag = 30			# maximum aa sequence separation in computation of sequence-order features
@@ -125,115 +125,116 @@ def descripGen_bespoke(proseq):
 	return descNames, descValues
 
 	
+# main	
+def main(aaindex_path, inFile, startIndex, stopIndex):
+
+	## globals
+	global silentFlag
+	silentFlag = 1
+
+	global v_lambda
+	v_lambda = 7		# no. of tiers in computation of PseAAC; must be shorter than minimum peptide length
+
+	global v_nlag
+	v_nlag = 30			# maximum aa sequence separation in computation of sequence-order features
+
+	global v_weight
+	v_weight = 0.05		# weight allocated to tiered correlation descriptors in PseAAC; 0.05 recommended in [Chou, Current Proteomics, 2009, 6, 262-274]
+
+	## main
 	
+	# error checking
+	#if len(sys.argv) != 5:
+	#	_usage()
+	#	sys.exit(1)
 
-## globals
-global silentFlag
-silentFlag = 1
+	#aaindex_path = sys.argv[1]
+	#inFile = sys.argv[2]
+	#startIndex = int(sys.argv[3])
+	#stopIndex = int(sys.argv[4])
 
-global v_lambda
-v_lambda = 7		# no. of tiers in computation of PseAAC; must be shorter than minimum peptide length
 
-global v_nlag
-v_nlag = 30			# maximum aa sequence separation in computation of sequence-order features
+	# loading sequences and indices into seqs and indices lists
+	indices = []
+	seqs = []
+	with open(inFile,'r') as seqsFile:
+		for line in seqsFile:
+			a, b =line.split()
+			a = int(a)
+			b = str(b)
+			indices.append(a)
+			seqs.append(b)
 
-global v_weight
-v_weight = 0.05		# weight allocated to tiered correlation descriptors in PseAAC; 0.05 recommended in [Chou, Current Proteomics, 2009, 6, 262-274]
+	if startIndex < 1:
+		print "ERROR: startIndex < 1"
+		sys.exit(1)
 
-## main
+	if stopIndex > len(indices):
+		print("ERROR: stopIndex > # seqs in %s" % (inFile))
+		sys.exit(1)
 	
-# error checking
-if len(sys.argv) != 5:
-	_usage()
-	sys.exit(1)
-
-aaindex_path = sys.argv[1]
-inFile = sys.argv[2]
-startIndex = int(sys.argv[3])
-stopIndex = int(sys.argv[4])
-
-
-# loading sequences and indices into seqs and indices lists
-indices = []
-seqs = []
-with open(inFile,'r') as seqsFile:
-	for line in seqsFile:
-		a, b =line.split()
-		a = int(a)
-		b = str(b)
-		indices.append(a)
-		seqs.append(b)
-
-if startIndex < 1:
-	print "ERROR: startIndex < 1"
-	sys.exit(1)
-
-if stopIndex > len(indices):
-	print("ERROR: stopIndex > # seqs in %s" % (inFile))
-	sys.exit(1)
+	if startIndex > stopIndex:
+		print "ERROR: startIndex >= stopIndex"
+		sys.exit(1)
 	
-if startIndex > stopIndex:
-	print "ERROR: startIndex >= stopIndex"
-	sys.exit(1)
+	if v_lambda >= len(min(seqs, key=len)):
+		print("ERROR: v_lambda = %d >= minimum seq length in %s" % (v_lambda, inFile))
+		sys.exit(1)
+
+	#if v_nlag >= len(min(seqs, key=len)):
+	#	print("ERROR: v_nlag = %d >= minimum seq length in %s" % (v_nlag, inFile))
+	#	sys.exit(1)
+
+
+	# start timer
+	t_start = time.clock()
+
+
+	# running through sequences, generating descriptors, and writing to descriptors.csv
+
+	fout = open("descriptors.csv","w")
+
+	print("Commencing descriptor generation for selected sequences in %s" % (inFile))
+	for SEQIDX in range(startIndex-1,stopIndex):
 	
-if v_lambda >= len(min(seqs, key=len)):
-	print("ERROR: v_lambda = %d >= minimum seq length in %s" % (v_lambda, inFile))
-	sys.exit(1)
-
-#if v_nlag >= len(min(seqs, key=len)):
-#	print("ERROR: v_nlag = %d >= minimum seq length in %s" % (v_nlag, inFile))
-#	sys.exit(1)
-
-
-# start timer
-t_start = time.clock()
-
-
-# running through sequences, generating descriptors, and writing to descriptors.csv
-
-fout = open("descriptors.csv","w")
-
-print("Commencing descriptor generation for selected sequences in %s" % (inFile))
-for SEQIDX in range(startIndex-1,stopIndex):
+		# - print to screen
+		print("    Processing sequence %d (%d more sequences remain)" % (SEQIDX+1, stopIndex-SEQIDX-1))
 	
-	# - print to screen
-	print("    Processing sequence %d (%d more sequences remain)" % (SEQIDX+1, stopIndex-SEQIDX-1))
+		# - selecting and verifying sequence
+		proseq = seqs[SEQIDX]
+		seqIndex = indices[SEQIDX]
+		if ProCheck.ProteinCheck(proseq) == 0:
+			print("ERROR: protein sequence %s is invalid" % (proseq))
+			sys.exit()
 	
-	# - selecting and verifying sequence
-	proseq = seqs[SEQIDX]
-	seqIndex = indices[SEQIDX]
-	if ProCheck.ProteinCheck(proseq) == 0:
-		print("ERROR: protein sequence %s is invalid" % (proseq))
-		sys.exit()
+		# - generating descriptors
+		descNames, descValues = descripGen_bespoke(proseq, aaindex_path)
 	
-	# - generating descriptors
-	descNames, descValues = descripGen_bespoke(proseq)
-	
-	# - writing to file
-	if SEQIDX == (startIndex-1):
-		fout.write('%s' % ('seqIndex,'))
-		for ii in range(0,len(descNames)):
-			fout.write('%s' % (descNames[ii]))
+		# - writing to file
+		if SEQIDX == (startIndex-1):
+			fout.write('%s' % ('seqIndex,'))
+			for ii in range(0,len(descNames)):
+				fout.write('%s' % (descNames[ii]))
+				if ii < (len(descNames)-1):
+					fout.write(',')
+				else:
+					fout.write('\n')
+				
+		fout.write('%s,' % (str(seqIndex)))
+		for ii in range(0,len(descValues)):
+			fout.write('%s' % (str(descValues[ii])))
 			if ii < (len(descNames)-1):
 				fout.write(',')
 			else:
 				fout.write('\n')
-				
-	fout.write('%s,' % (str(seqIndex)))
-	for ii in range(0,len(descValues)):
-		fout.write('%s' % (str(descValues[ii])))
-		if ii < (len(descNames)-1):
-			fout.write(',')
-		else:
-			fout.write('\n')
 	
-print("DONE!")
+	print("DONE!")
 
-fout.close()
+	fout.close()
 
 
-# stop timer
-t_stop = time.clock()
-print("Elapsed time      = %.2f s" % (t_stop - t_start))
-print("Time per sequence = %.2f s" % ( (t_stop - t_start)/(stopIndex - startIndex + 1) ) )
+	# stop timer
+	t_stop = time.clock()
+	print("Elapsed time      = %.2f s" % (t_stop - t_start))
+	print("Time per sequence = %.2f s" % ( (t_stop - t_start)/(stopIndex - startIndex + 1) ) )
 

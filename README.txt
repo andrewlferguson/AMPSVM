@@ -28,16 +28,8 @@ Installing propy into virtual environment:
 
 Testing SVM prediction:
 
->> seqFile='seqs.txt'
->> nSeq=1
-
->> python descripGen_12.py "./aaindex/" $seqFile 1 $nSeq
-
->> descFile='descriptors.csv'
->> ZFile='Z_score_mean_std__intersect_noflip.csv'
->> svcPkl='svc.pkl'
-
->> python predictSVC.py $descFile $ZFile $svcPkl
+>> python descripGen_12.py './aaindex/' 'seqs.txt' 1 1
+>> python predictSVC.py 'descriptors.csv' 'Z_score_mean_std__intersect_noflip.csv' 'svc.pkl'
 
 
 Construct site:
