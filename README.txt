@@ -159,7 +159,6 @@ The default page for your site should say "Welcome to Django", just like it does
 
 $$ THIS IS THE WORK LOOP WE CYCLE THROUGH $$
 
-
 Local edits:
 
 Modify mysite/urls.py (see file)
@@ -190,7 +189,32 @@ PythonAnywhere pull:
 > git pull
 Reload webpage
 
+	PythonAnywhere hard pull and reset:
+	> git fetch --all
+	> git reset --hard origin/master
+	> git pull
+
 $$ $$
+
+
+########
+
+PythonAnywhere employs different cwd than local implementation 
+- local cwd is ~/AMPSVM
+- PythonAnywhere cwd runs inside virtual environment ~/AMPSVM/AMPSVM
+
+So must change the following lines in svm/views.py:
+
+sys.path.append('./code') 				-> 	sys.path.append('./AMPSVM/code')
+os.chdir('./code')					-> 	os.chdir('./AMPSVM/code')
+descripGen_12.main('./aaindex','../seqs.txt',1,1)	-> 	descripGen_12.main('./aaindex','../../seqs.txt',1,1)
+os.chdir('..')						-> 	os.chdir('../..')
+
+For convenience have made these changes in views_PythonAnywhere.py so can pull from git then manually within PythonAnywhere delete views.py and rename views_PythonAnywhere.py -> views.py
+
+
+########
+
 
 
 
