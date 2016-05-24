@@ -210,7 +210,10 @@ os.chdir('./code')					-> 	os.chdir('./AMPSVM/code')
 descripGen_12.main('./aaindex','../seqs.txt',1,1)	-> 	descripGen_12.main('./aaindex','../../seqs.txt',1,1)
 os.chdir('..')						-> 	os.chdir('../..')
 
-For convenience have made these changes in views_PythonAnywhere.py so can pull from git then manually within PythonAnywhere delete views.py and rename views_PythonAnywhere.py -> views.py
+For convenience have made these changes in views_PythonAnywhere.py 
+Pull from git then manually within PythonAnywhere 
+- delete views.py 
+- edit and save as views_PythonAnywhere.py -> views.py
 
 
 ########
