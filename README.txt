@@ -1,3 +1,5 @@
+--1-- local setup
+
 Create and load virtual environment:
 >> sudo conda create -n AMPSVM python=2.7 anaconda
 >> source activate AMPSVM
@@ -81,6 +83,8 @@ Leave the "initialize with a README" tickbox un-checked, leave the .gitignore op
 >> sudo git push
 
 
+--2-- Python Anywhere setup
+
 Python Anywhere:
 Login to PythonAnywhere.com
 Boot bash console
@@ -102,14 +106,15 @@ Boot bash console
 > pip install urllib3[secure] pyopenssl ndg-httpsclient pyasn1
 
 
+## NOTE ## 
+Installation of these modules requires more disk space than is available on the free 512 MB "Beginner" account -- needed to upgrade to "Hacker" to install. BUT post-
+installation disc space fits within 512 MB so can probably downgrade after virtual environment is set up.
+
+
 Testing SVM prediction:
 
 > python descripGen_12.py "./aaindex/" 'seqs.txt' 1 1
 > python predictSVC.py 'descriptors.csv' 'Z_score_mean_std__intersect_noflip.csv' 'svc.pkl'
-
-
-
-
 
 
 > python manage.py migrate
@@ -151,13 +156,7 @@ We're all done! Hit the big green Reload button and you'll be able to go view yo
 The default page for your site should say "Welcome to Django", just like it does on your local computer. Try adding /admin/ to the end of the URL, and you'll be taken to the admin site. 
 
 
-
-
-
-
-
-
-$$ THIS IS THE WORK LOOP WE CYCLE THROUGH $$
+--3-- local -> git -> deploy loop
 
 Local edits:
 
@@ -194,12 +193,13 @@ Reload webpage
 	> git reset --hard origin/master
 	> git pull
 
-$$ $$
 
 
-########
+# Python Anywhere NOTES #
 
-PythonAnywhere employs different cwd than local implementation 
+1. Installation of {numpy, scipy, sklearn} modules into virtual environment requires more disk space than is available on the free 512 MB "Beginner" account -- needed to upgrade to "Hacker" to install. BUT post-installation disc space fits within 512 MB so can probably downgrade after virtual environment is set up.
+
+2. PythonAnywhere employs different cwd than local implementation 
 - local cwd is ~/AMPSVM
 - PythonAnywhere cwd runs inside virtual environment ~/AMPSVM/AMPSVM
 
@@ -210,13 +210,12 @@ os.chdir('./code')					-> 	os.chdir('./AMPSVM/code')
 descripGen_12.main('./aaindex','../seqs.txt',1,1)	-> 	descripGen_12.main('./aaindex','../../seqs.txt',1,1)
 os.chdir('..')						-> 	os.chdir('../..')
 
-For convenience have made these changes in views_PythonAnywhere.py 
+For convenience have hosted two views.py files (i) views_localhost.py and (ii) views_PythonAnywhere.py 
+
 Pull from git then manually within PythonAnywhere 
 - delete views.py 
 - edit and save as views_PythonAnywhere.py -> views.py
 
-
-########
 
 
 
