@@ -1,13 +1,29 @@
 {% extends 'svm/base.html' %}
 
 {% block content %}
-<div>
-    <h2>Success!</h2>
-</div>
+<script type="text/javascript"> 
+if ({{ prediction }} == 1) 
+{ 
+document.write("<h2><b>Hit!</b><h2>")
+document.write("<h4>Your peptide <b><u>is</u></b> predicted to be antimicrobial</h4>")
+document.write("<h4>&rarr; P(hit) = {{ P_plus1 }}</h4>")
+document.write("<h4>&rarr; distance to SVM margin = {{ distToMargin }}</h4>")
+}
+else
+{
+document.write("<h2><b>Miss!</b><h2>")
+document.write("<h4>Your peptide <b><u>is not</u></b> predicted to be antimicrobial</h4>")
+document.write("<h4>&rarr; P(hit) = {{ P_plus1 }}</h4>")
+document.write("<h4>&rarr; distance to SVM margin = {{ distToMargin }}</h4>")
+}
+</script>
+<br></br>
+<!--
 <br></br>
 <p>prediction   = {{ prediction }}</p>
 <p>distToMargin = {{ distToMargin }}</p>
-<p>P(+1)        = {{ P_plus1 }}</p>
-<p>P(-1)        = {{ P_neg1 }}</p>
+<p>P(hit)        = {{ P_plus1 }}</p>
+<p>P(miss)        = {{ P_neg1 }}</p>
 <br></br>
+-->
 {% endblock %}

@@ -3,3 +3,7 @@ __pycache__
 db.sqlite3
 /static
 .DS_Store
+./code/seqs.txt
+./code/descriptors.csv
+./code/descriptors_PREDICTIONS.csv
+./code/descriptors_PREDICTIONS_unsorted.csv

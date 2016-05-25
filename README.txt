@@ -30,8 +30,10 @@ Installing propy into virtual environment:
 
 Testing SVM prediction:
 
+>> cd ./code/
 >> python descripGen_12.py './aaindex/' 'seqs.txt' 1 1
 >> python predictSVC.py 'descriptors.csv' 'Z_score_mean_std__intersect_noflip.csv' 'svc.pkl'
+>> cd ..
 
 
 Construct site:

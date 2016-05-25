@@ -24,8 +24,11 @@ def seq(request):
                 f.write(seq)
                 f.close()
             # redirect to a new URL:
-            return redirect('/result/')
-
+            if len(seq) >= 8 and len(seq) <= 100:
+                return redirect('/result/')
+            else:
+                return redirect('/fail/')
+                
     # if a GET (or any other method) we'll create a blank form
     else:
         form = SeqForm()
@@ -33,12 +36,12 @@ def seq(request):
     return render(request, 'svm/seq.html', {'form': form})
 
 def result(request):
-
+    
     os.chdir('./AMPSVM/code')
-
+    
     descripGen_12.main('./aaindex','../../seqs.txt',1,1)
     predictSVC.main('descriptors.csv','Z_score_mean_std__intersect_noflip.csv','svc.pkl')
-
+    
     with open('descriptors_PREDICTIONS.csv','r') as fin:
         line = fin.readline()
         headers = line.strip().split(',')
@@ -49,7 +52,15 @@ def result(request):
         distToMargin = data[2]
         P_neg1 = data[3]
         P_plus1 = data[4]
-
+        
     os.chdir('../..')
-
+    
+    distToMargin = '%6.2f' % (float(distToMargin))
+    P_neg1 = '%6.2f' % (float(P_neg1))
+    P_plus1 = '%6.2f' % (float(P_plus1))
+    
     return render(request, 'svm/result.html', {'seqIndex' : seqIndex, 'prediction' : prediction, 'distToMargin' : distToMargin, 'P_neg1' : P_neg1, 'P_plus1' : P_plus1})
+
+def fail(request):
+    
+    return render(request, 'svm/fail.html')
