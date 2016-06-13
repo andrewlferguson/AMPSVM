@@ -216,6 +216,7 @@ For convenience have hosted two views.py files (i) views_localhost.py and (ii) v
 Pull from git then manually within PythonAnywhere 
 - delete views.py 
 - edit and save as views_PythonAnywhere.py -> views.py
+- reload site
 
 
 
@@ -259,12 +260,17 @@ Local:
 
 PythonAnywhere (hard pull and reset):
 
+> cd AMPSVM
+> source AMPSVM/bin/activate
+
 > git fetch --all
 > git reset --hard origin/master
 > git pull
 
-\-> delete views.py 
+\-> delete AMPSVM/svm/views.py 
 \-> edit and save as views_PythonAnywhere.py -> views.py
+
+\-> Reload site
 
 
 
