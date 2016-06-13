@@ -109,8 +109,7 @@ Boot bash console
 
 
 ## NOTE ## 
-Installation of these modules requires more disk space than is available on the free 512 MB "Beginner" account -- needed to upgrade to "Hacker" to install. BUT post-
-installation disc space fits within 512 MB so can probably downgrade after virtual environment is set up.
+Installation of these modules requires more disk space than is available on the free 512 MB "Beginner" account -- needed to upgrade to "Hacker" to install. BUT post-installation disc space fits within 512 MB so can probably downgrade after virtual environment is set up.
 
 
 Testing SVM prediction:
@@ -232,7 +231,40 @@ Deactivate virtual environment:
 
 
 
+--------
 
+EDIT WORKFLOW
+
+
+Local:
+
+>> cd /Users/alf/Desktop/AMPSVM 
+>> source activate AMPSVM
+
+>> git status
+
+** Make edits **
+
+>> python manage.py runserver
+
+** Visit and test http://127.0.0.1:8000/ **
+
+>> git status
+>> git add --all .
+>> git commit -m ""
+>> sudo git push
+
+>> source deactivate
+
+
+PythonAnywhere (hard pull and reset):
+
+> git fetch --all
+> git reset --hard origin/master
+> git pull
+
+\-> delete views.py 
+\-> edit and save as views_PythonAnywhere.py -> views.py
 
 
 
