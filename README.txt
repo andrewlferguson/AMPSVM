@@ -254,6 +254,7 @@ Local:
 >> git add --all .
 >> git commit -m ""
 >> sudo git push
+\-> Pwd is usual secure
 
 >> source deactivate
 
